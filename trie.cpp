@@ -63,7 +63,7 @@ void Trie::add_word(const std::string &word)
     }
     current->word = word;
 }
-int match_sequence(const string &sequence, uint64_t sequence_start_index, list<Match> matches, list<TrieNode *> &partial_matches, Trie &trie)
+int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, list<Match> &matches, list<TrieNode *> &partial_matches, Trie &trie)
 {
     int match_count = 0;
     uint64_t current_index = sequence_start_index;
@@ -92,4 +92,8 @@ int match_sequence(const string &sequence, uint64_t sequence_start_index, list<M
         current_index++;
     }
     return match_count;
+}
+std::ostream & operator<<(std::ostream &lhs, const Match &rhs)
+{
+    return lhs << rhs.word << ": " << rhs.index;
 }
