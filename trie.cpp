@@ -65,7 +65,7 @@ void Trie::add_word(const std::string &word)
 }
 int match_sequence(const string &sequence, uint64_t sequence_start_index, list<Match> matches, list<TrieNode *> &partial_matches, Trie &trie)
 {
-    int matches = 0;
+    int match_count = 0;
     uint64_t current_index = sequence_start_index;
     for (char c : sequence)
     {
@@ -81,14 +81,15 @@ int match_sequence(const string &sequence, uint64_t sequence_start_index, list<M
                 current = current->children[symbol];
                 if (current != NULL && ! current->word.empty())
                 {
-                    matches.push_back(Match(current->word, current->index));
-                    
+                    matches.push_back(Match(current->word, current_index));
+                    match_count++;
                 }
             }
-            TrieNode *current = trie->root_node[symbol];
+            TrieNode *current = trie.root_node.children[symbol];
             partial_matches.push_back(current);
             partial_matches.remove_if([](TrieNode *node){return (node == NULL);});
         }
         current_index++;
     }
+    return match_count;
 }
