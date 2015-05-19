@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     list<TrieNode *> partial_matches;
     match_sequence(seq1, 0, matches, partial_matches, trie);
     std::cout << "First seq had " << matches.size() << " matches\n";
-    match_sequence(seq1, seq1.size(), matches, partial_matches, trie);
+    match_sequence(seq2, seq1.size(), matches, partial_matches, trie);
     std::cout << "After continuation " << matches.size() << " matches\n";
     for (auto match: matches)
     {

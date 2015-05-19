@@ -41,37 +41,53 @@ int to_baudot(char c)
         case '9': return 0x18;
         case ' ': return 0x4;
         default:
-            return 33;
+            return 32;
+    }
+}
+TrieNode::TrieNode(const string &init_word)
+{
+    //std::cout << " Initializing trie node\n";
+    word = init_word;
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
+        children[i] = NULL;
     }
 }
 void Trie::add_word(const std::string &word)
 {
     TrieNode *current = &root_node;
     int index = 0;
-    while (index < word.size() -1)
+    while (index < word.size())
     {
         int symbol = to_baudot(word[index]);
-        if (symbol == 33) 
+        index++;
+        if (symbol == 32) 
         {
-            continue;
+            
+            return;
         }
         if (current->children[symbol] == NULL)
         {
+         //   std::cout << "Makeing new node\n";
             current->children[symbol] = new TrieNode;
         }
+	else
+        {
+        //    std::cout << "Node for " << symbol << " exists\n";
+        }
         current = current->children[symbol];
-        index++;
+//        std::cout << "Current = " << (unsigned long) current << "\n";
     }
     current->word = word;
 }
-int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, list<Match> &matches, list<TrieNode *> &partial_matches, Trie &trie)
+int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, list<Match> &matches, list<TrieNode *> &partial_matches, Trie &trie, int min_length)
 {
     int match_count = 0;
     uint64_t current_index = sequence_start_index;
-    for (char c : sequence)
+    unsigned long count = 0;
+    for (int symbol : sequence)
     {
-        int symbol = to_baudot(c);
-        if (symbol == 33)
+        if (symbol >= 32)
         {
             partial_matches.clear();
         }
@@ -80,9 +96,10 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, l
             for (auto current : partial_matches)
             {
                 current = current->children[symbol];
-                if (current != NULL && ! current->word.empty())
+                if (current != NULL && ! current->word.empty() && current->word.size() >= min_length) 
                 {
                     matches.push_back(Match(current->word, current_index));
+		    std::cout << "Found: " << current->word << "\n";
                     match_count++;
                 }
             }
@@ -91,6 +108,11 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, l
             partial_matches.remove_if([](TrieNode *node){return (node == NULL);});
         }
         current_index++;
+        count++;
+        if (count % 1000 == 0)
+        {
+            std::cout << "Matched " << count << " entries\n";
+        }
     }
     return match_count;
 }

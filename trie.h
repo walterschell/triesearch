@@ -14,8 +14,9 @@ int to_baudot(char c);
 
 struct TrieNode
 {
+    TrieNode(const string &init_word="");
     string word;
-    TrieNode *children[26] = {NULL};
+    TrieNode *children[ALPHABET_SIZE];
 };
 struct Trie
 {
@@ -29,5 +30,5 @@ struct Match
     Match(const string &init_word, uint64_t init_index) : word(init_word), index(init_index) {}
     friend std::ostream & operator<<(std::ostream &lhs, const Match &rhs);
 };
-int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, list<Match> &matches, list<TrieNode *> &partial_matches, Trie &trie);
+int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, list<Match> &matches, list<TrieNode *> &partial_matches, Trie &trie, int min_length = 4);
 #endif
