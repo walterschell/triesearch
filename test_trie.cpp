@@ -17,8 +17,10 @@ int main(int argc, char *argv[])
     {
         string foo;
         in >> foo;
+        std::cout << "Adding " << foo << "\n";
         trie.add_word(foo);
     }
+    std::cout << "Trie built\n";
     list<Match> matches;
     list<TrieNode *> partial_matches;
     match_sequence(seq1, 0, matches, partial_matches, trie);

@@ -60,6 +60,7 @@ void Trie::add_word(const std::string &word)
             current->children[symbol] = new TrieNode;
         }
         current = current->children[symbol];
+        index++;
     }
     current->word = word;
 }
