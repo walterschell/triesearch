@@ -44,6 +44,76 @@ int to_baudot(char c)
             return 32;
     }
 }
+char to_char(int baudot)
+{
+	switch(baudot)
+	{
+	case 0x3: return 'a';
+	case 0x19: return 'b';
+	case 0xe: return 'c';
+	case 0x9: return 'd';
+	case 0x1: return 'e';
+	case 0xd: return 'f';
+	case 0x1a: return 'g';
+	case 0x14: return 'h';
+	case 0x6: return 'i';
+	case 0xb: return 'j';
+	case 0xf: return 'k';
+	case 0x12: return 'l';
+	case 0x1c: return 'm';
+	case 0xc: return 'n';
+	case 0x18: return 'o';
+	case 0x16: return 'p';
+	case 0x17: return 'q';
+	case 0xa: return 'r';
+	case 0x5: return 's';
+	case 0x10: return 't';
+	case 0x7: return 'u';
+	case 0x1e: return 'v';
+	case 0x13: return 'w';
+	case 0x1d: return 'x';
+	case 0x15: return 'y';
+	case 0x11: return 'z';
+    case 0x4: return ' ';
+    default:
+        return '*';
+
+	}
+}
+string to_string(vector<int> digits)
+{
+	string result;
+	for (int digit : digits)
+	{
+		result += to_char(digit);
+	}
+	return result;
+}
+string to_string(vector<int> digits, int max)
+{
+	string result;
+	for (int digit : digits)
+	{
+		result += to_char(digit);
+		max--;
+		if (max <= 0)
+		{
+			break;
+		}
+	}
+	return result;
+
+}
+vector<int> to_vector(string word)
+{
+	vector<int> result;
+	for (char c : word)
+	{
+		result.push_back(to_baudot(c));
+	}
+	return result;
+}
+
 TrieNode::TrieNode(const string &init_word)
 {
     //std::cout << " Initializing trie node\n";

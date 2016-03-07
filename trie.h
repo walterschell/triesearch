@@ -11,6 +11,10 @@ using std::vector;
 
 const int ALPHABET_SIZE = 32;
 int to_baudot(char c);
+char to_char(int baudot);
+string to_string(vector<int> digits);
+string to_string(vector<int> digits, int max);
+vector<int> to_vector(string word);
 
 struct TrieNode
 {
