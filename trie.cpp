@@ -133,20 +133,14 @@ void Trie::add_word(const std::string &word)
         index++;
         if (symbol == 32) 
         {
-            
+           std::cout << "Ignoring: " << word << std::endl;
             return;
         }
         if (current->children[symbol] == NULL)
         {
-         //   std::cout << "Makeing new node\n";
             current->children[symbol] = new TrieNode;
         }
-	else
-        {
-        //    std::cout << "Node for " << symbol << " exists\n";
-        }
         current = current->children[symbol];
-//        std::cout << "Current = " << (unsigned long) current << "\n";
     }
     current->word = word;
 }
@@ -157,25 +151,41 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, l
     unsigned long count = 0;
     for (int symbol : sequence)
     {
-        if (symbol >= 32)
+    	if (symbol >= 32)
         {
-            partial_matches.clear();
+            std::cout << "Clearing partial matches\n";
+        	partial_matches.clear();
         }
         else
         {
-            for (auto current : partial_matches)
+            std::list<TrieNode *> next_partials;
+
+            for (auto current = partial_matches.begin(); current != partial_matches.end();)
             {
-                current = current->children[symbol];
-                if (current != NULL && ! current->word.empty() && current->word.size() >= min_length) 
+                auto child = (*current)->children[symbol];
+                if (child != NULL && ! child->word.empty() && child->word.size() >= min_length)
                 {
-                    matches.push_back(Match(current->word, current_index));
-		    std::cout << "Found: " << current->word << "\n";
+                    matches.push_back(Match(child->word, current_index - child->word.size() + 1));
+                    std::cout << "Found: " << child->word << "\n";
                     match_count++;
                 }
+                if (child != NULL)
+                {
+                	next_partials.push_back(child);
+                }
+            	current++;
+
+            }
+            partial_matches.clear();
+            for (auto current : next_partials)
+            {
+            	partial_matches.push_back(current);
             }
             TrieNode *current = trie.root_node.children[symbol];
-            partial_matches.push_back(current);
-            partial_matches.remove_if([](TrieNode *node){return (node == NULL);});
+            if (NULL != current)
+            {
+            	partial_matches.push_back(current);
+            }
         }
         current_index++;
         count++;
@@ -188,5 +198,5 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, l
 }
 std::ostream & operator<<(std::ostream &lhs, const Match &rhs)
 {
-    return lhs << rhs.word << ": " << rhs.index;
+    return lhs << ">" << rhs.word << "< index: " << rhs.index;
 }
