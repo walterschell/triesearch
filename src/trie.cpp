@@ -144,6 +144,7 @@ void Trie::add_word(const std::string &word)
     }
     current->word = word;
 }
+
 int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index, 
                     list<Match> &matches, list<TrieNode *> &partial_matches, 
                     Trie &trie, int min_length)
