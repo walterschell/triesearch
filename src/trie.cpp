@@ -133,7 +133,7 @@ void Trie::add_word(const std::string &word)
         index++;
         if (symbol == 32) 
         {
-           std::cout << "Ignoring: " << word << std::endl;
+           //std::cout << "Ignoring: " << word << std::endl;
             return;
         }
         if (current->children[symbol] == NULL)
@@ -166,13 +166,13 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index,
             for (auto current = partial_matches.begin(); current != partial_matches.end();)
             {
                 auto child = (*current)->children[symbol];
-                if (child != NULL && ! child->word.empty() && child->word.size() >= min_length)
+                if (child != nullptr && ! child->word.empty() && child->word.size() >= min_length)
                 {
                     matches.push_back(Match(child->word, current_index - child->word.size() + 1));
-                    std::cout << "Found: " << child->word << "\n";
+                    //std::cout << "Found: " << child->word << "\n";
                     match_count++;
                 }
-                if (child != NULL)
+                if (child != nullptr)
                 {
                 	next_partials.push_back(child);
                 }
@@ -185,7 +185,7 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index,
             	partial_matches.push_back(current);
             }
             TrieNode *current = trie.root_node.children[symbol];
-            if (NULL != current)
+            if (nullptr != current)
             {
             	partial_matches.push_back(current);
             }
@@ -194,7 +194,7 @@ int match_sequence(const vector<int> &sequence, uint64_t sequence_start_index,
         count++;
         if (count % 1000 == 0)
         {
-            std::cout << "Matched " << count << " entries\n";
+            //std::cout << "Matched " << count << " entries\n";
         }
     }
     return match_count;
